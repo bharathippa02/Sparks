@@ -1,0 +1,56 @@
+<%- include('partials/header') %>
+<h2>Select the customer to send money</h2>
+<br>
+<br>
+
+<table id="table" class="center">
+    <tr>
+        <th>
+            Name
+        </th>
+        <th>
+            Email
+        </th>
+        <th>
+            Balance
+        </th>
+    </tr>
+    <% for(var i=0;i<10;i++){ %>
+    <tr>
+        <td>
+            <%= users[i].Name %>
+        </td>
+        <td>
+            <%= users[i].Email %>
+        </td>
+        <td>
+            <%= users[i].Balance %>
+        </td>
+    </tr>
+    <% } %>
+</table>
+<br>
+
+<form action="/toCustomer" method="post">
+
+    <h2>Selected Customer</h2>
+    Name:<input type="text" name="button1" id="button1" required><br><br>
+    Mail:<input type="email" name="mail" id="mail" required><br><br>
+    <button type="submit" class="btn btn-dark">Transfer Money</button>
+</form>
+
+<script>
+    var table = document.getElementById('table');
+
+    for (var i = 0; i < table.rows.length; i++) {
+        table.rows[i].onclick = function () {
+            //rIndex = this.rowIndex;
+            document.getElementById("button1").value = this.cells[0].innerHTML;
+            document.getElementById("mail").value = this.cells[1].innerHTML;
+
+        };
+    }
+</script>
+
+
+<%- include('partials/footer') %>

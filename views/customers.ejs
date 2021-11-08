@@ -1,0 +1,68 @@
+<%- include('partials/header') %>
+
+    <h2>Select the customer</h2>
+    <br>
+    <br>
+    
+<table id="table" class="center">
+    <tr>
+        <th>
+            Name
+        </th>
+        <th>
+            Email
+        </th>
+        <th>
+            Balance
+        </th>
+    </tr>
+<% for(var i=0;i<10;i++){ %>
+      
+    
+    <tr>
+        
+           
+        <td>
+            <%= users[i].Name %>
+        </td>
+        <td>
+            <%= users[i].Email %>
+        </td>
+        <td>
+            <%= users[i].Balance %>
+        </td>
+        
+    
+    </tr>
+      
+       
+<% } %>
+</table>
+<br>
+
+<form action="/selectedCustomer" method="post">
+    <h2>Selected Customer</h2>
+ Name:<input type="text" name="button" id="button" required ><br><br>
+ Mail:<input type="email" name="maill" id="maill" required ><br><br>
+<button type="submit" class="btn btn-dark">submit</button>
+</form>
+
+<script>
+    
+    var table = document.getElementById('table');
+    
+    for(var i = 0; i < table.rows.length; i++)
+    {
+        table.rows[i].onclick = function()
+        {
+             //rIndex = this.rowIndex;
+             document.getElementById("button").value = this.cells[0].innerHTML;
+             document.getElementById("maill").value = this.cells[1].innerHTML;
+             
+        };
+    }
+
+</script>
+
+
+<%- include('partials/footer') %>
