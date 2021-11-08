@@ -42,13 +42,39 @@ app.get("/viewCustomers",function(req,res)
 {
      Customer.find({},function(err,items)
     {
-        res.render("customers",{users:items});
+        res.render("viewCustomersAll",{users:items});
     })
 })
 
 app.post("/viewCustomers",function(req,res)
 {
      res.redirect("/viewCustomers");
+})
+
+app.get("/makeTransaction",function(req,res)
+{
+     Customer.find({},function(err,items)
+    {
+        res.render("customers",{users:items});
+    })
+})
+
+app.post("/makeTransaction",function(req,res)
+{
+     res.redirect("/makeTransaction");
+})
+
+app.get("/viewTransactions",function(req,res)
+{
+     Transaction.find({},function(err,items)
+    {
+        res.render("transaction",{trans:items});
+    })
+})
+
+app.post("/viewTransactions",function(req,res)
+{
+     res.redirect("/viewTransactions");
 })
 
 app.get("/selectedCustomer",function(req,res)
@@ -70,11 +96,11 @@ app.get("/toCustomer",function(req,res)
 {
      if(fromId==toId)
      {
-         res.render("success",{text:"You cannot send money to same account"});
+         res.render("failure",{text:"You cannot send money to same account"});
      }
      else
      { 
-    res.render("result",{x1:fromId,y1:toId});
+         res.render("result",{x1:fromId,y1:toId});
     }
 })
 
@@ -106,19 +132,34 @@ app.get("/transaction",function(req,res)
         s2=s2.substring(0,s2.length-1);
     }
 
-    const t1=new Transaction({From:s1,To:s2,Amount:req.body.amount});
+    const t1=new Transaction({From:s1,To:s2,Amount:amount1});
 
     t1.save();
+
+    var updatedBalance1=0,updatedBalance2=0;
 
 
     Customer.updateOne({Name:s1},{$inc:{Balance:-amount1}},function(err,items)
     {
-        
+        Customer.find({Name:s1},function(err,items)
+        {
+           updatedBalance1=items[0].Balance;
+
+           Customer.updateOne({Name:s2},{$inc:{Balance:amount1}},function(err,items)
+           {
+               Customer.find({Name:s2},function(err,items)
+               {
+                  updatedBalance2=items[0].Balance;
+       
+                  res.render("success",{text:"Transaction Successful",z1:s1,z2:s2,x1:updatedBalance1,x2:updatedBalance2}); 
+       
+               })
+              
+           })
+
+        })
     })
-    Customer.updateOne({Name:s2},{$inc:{Balance:amount1}},function(err,items)
-    {
-        res.render("success",{text:"Transaction Successful"}); 
-    })
+   
   
 })
 
